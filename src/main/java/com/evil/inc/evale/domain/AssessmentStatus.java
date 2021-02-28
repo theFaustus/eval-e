@@ -1,5 +1,5 @@
 package com.evil.inc.evale.domain;
 
-public enum Status {
+public enum AssessmentStatus {
     FIRST_PHASE, SECOND_PHASE, APPROVED
 }
