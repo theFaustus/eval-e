@@ -4,4 +4,5 @@ import com.evil.inc.evale.domain.Assessment;
 
 public interface AssessmentService {
     void create(Assessment assessment);
+    Assessment getById(Long id);
 }

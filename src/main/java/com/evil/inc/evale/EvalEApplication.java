@@ -22,6 +22,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @SpringBootApplication
 @Slf4j
 public class EvalEApplication {
@@ -32,7 +34,7 @@ public class EvalEApplication {
 
     @Bean
     @Transactional
-    public CommandLineRunner commandLineRunner(AssessmentService assessmentService, UserService userService) {
+    public CommandLineRunner commandLineRunner(AssessmentService assessmentService, UserService userService, AssessmentRepository assessmentRepository) {
         return args -> {
 
             final User user = new User("bob", "dylan", "bdylan", "123", "bdylan@gmail.com", JobPosition.SENIOR);
@@ -69,8 +71,9 @@ public class EvalEApplication {
 
             user.addAssessment(assessment);
 //            userRepository.save(user1);
-            assessmentService.create(assessment);
+//            assessmentService.create(assessment);
             userService.create(user);
+            final Assessment byId = assessmentService.getById(assessment.getId());
 
         };
     }

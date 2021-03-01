@@ -9,10 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -64,7 +62,16 @@ public class Assessment extends AbstractEntity {
         Assessment assessment = new Assessment();
         assessment.setTitle(template.getTitle());
         assessment.setDescription(template.getDescription());
-        template.getEvaluationGroupList().forEach(assessment::addEvaluationGroup);
+        template.getEvaluationGroupList().forEach(templateEvaluationGroup -> {
+            final EvaluationGroup eg = new EvaluationGroup(templateEvaluationGroup.getTitle(),
+                                                           templateEvaluationGroup.getDescription());
+            templateEvaluationGroup.getEvaluationFields()
+                    .stream()
+                    .map(templateEvaluationField -> new EvaluationField(templateEvaluationField.getName(),
+                                                                        templateEvaluationField.getDescription()))
+                    .forEach(eg::addEvaluationField);
+            assessment.addEvaluationGroup(eg);
+        });
         assessment.setJobPosition(template.getJobPosition());
         assessment.setTemplate(false);
         return assessment;
