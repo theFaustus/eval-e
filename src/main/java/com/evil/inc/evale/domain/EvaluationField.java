@@ -20,6 +20,8 @@ public class EvaluationField extends AbstractEntity{
     private Long value;
     private String description;
 
+    private int fieldOrder;
+
     private String comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,6 +32,8 @@ public class EvaluationField extends AbstractEntity{
         this.name = name;
         this.description = description;
     }
+
+    //TODO equals and hashcode
 
     @Override
     public String toString() {

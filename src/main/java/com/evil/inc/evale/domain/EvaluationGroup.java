@@ -23,6 +23,8 @@ public class EvaluationGroup extends AbstractEntity{
     private String title;
     private String description;
 
+    private int groupOrder;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn()
     private Assessment assessment;

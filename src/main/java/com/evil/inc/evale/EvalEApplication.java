@@ -36,10 +36,6 @@ public class EvalEApplication {
     @Transactional
     public CommandLineRunner commandLineRunner(AssessmentService assessmentService, UserService userService, AssessmentRepository assessmentRepository) {
         return args -> {
-
-            final User user = new User("bob", "dylan", "bdylan", "123", "bdylan@gmail.com", JobPosition.SENIOR);
-            final User user1 = new User("bobbie", "dylan", "bdylan", "123", "bdylan@gmail.com", JobPosition.SENIOR);
-
             final Assessment templateAssessment = new Assessment("3.b Service Software Engineer Medior",
                                                                  "Medior grade evaluation form",
                                                                  JobPosition.SENIOR,
@@ -57,23 +53,6 @@ public class EvalEApplication {
             assessmentService.create(templateAssessment);
             log.info("Template assessment created {}", templateAssessment);
 
-            final Assessment assessment = Assessment.from(templateAssessment);
-            assessment.setAssessmentStatus(AssessmentStatus.FIRST_PHASE);
-            assessment.addPersonalGoal(new SMARTPersonalGoal("Lorem Ipsum", "Lorem Ipsum", "Lorem Ipsum", "Lorem Ipsum", "Lorem Ipsum"));
-            assessment.addDepartmentGoal(new SMARTDepartmentGoal("Lorem Ipsum", "Lorem Ipsum", "Lorem Ipsum", "Lorem Ipsum", "Lorem Ipsum"));
-
-            final Feedback feedback = new Feedback(false, "Good guy", user1);
-            feedback.addQuestion(new FeedbackQuestion("Lorem Ipsum", FeedbackAnswer.NO));
-
-            assessment.addFeedback(feedback);
-
-            log.info("Assessment created {}", assessment);
-
-            user.addAssessment(assessment);
-//            userRepository.save(user1);
-//            assessmentService.create(assessment);
-            userService.create(user);
-            final Assessment byId = assessmentService.getById(assessment.getId());
 
         };
     }

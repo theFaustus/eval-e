@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+          integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/9dfa6c6e5c.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link media="all" rel="stylesheet" th:href="@{/style.css}" type="text/css">
+    <title>eval-e | users</title>
+</head>
+<body>
+<div class="alert alert-info" role="alert">
+    <h2>eval-e | users</h2>
+</div>
+<div>
+    <div class="card" style="margin-bottom: 15px;">
+        <blockquote class="blockquote mb-0 card-body">
+            <form th:action="@{/assessments}">
+                <input class="btn btn-primary" type="submit" value="Manage assessments" />
+            </form>
+        </blockquote>
+    </div>
+    <div th:if="${users.isEmpty()}">
+        <div style="display: flex; align-content: center; justify-content: center;">
+            <div class="alert alert-info" role="alert"
+                 style="margin-left: 20px; margin-right: 20px; margin-top: 20px;">
+                <h3>No users registered.</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4" th:if="${!users.isEmpty()}">
+        <div class="col" th:each="user : ${users}">
+            <div class="card">
+                <blockquote class="blockquote mb-0 card-body">
+                    <h5 class="card-title"><span th:text="${user.username} + ' '"></span><span
+                            class="badge bg-warning text-dark" th:text="${user.jobPosition}">Warning</span></h5>
+                    <p class="card-text" th:text="${user.firstName + ' ' + user.lastName}"></p>
+                    <footer class="blockquote-footer">
+                        <small class="text-muted"  th:text="${user.email}"></small>
+                    </footer>
+                    <button type="button" class="btn btn-secondary">Assessments</button>
+                    <button type="button" class="btn btn-success">Assess</button>
+                    <button type="button" class="btn btn-danger">Delete</button>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -27,6 +27,9 @@ public class User extends AbstractEntity {
     private String email;
 
     @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
     private JobPosition jobPosition;
 
     @OneToMany(mappedBy = "assessedUser", cascade = CascadeType.ALL, orphanRemoval = true)
