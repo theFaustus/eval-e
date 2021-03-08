@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+          integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/9dfa6c6e5c.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link media="all" rel="stylesheet" th:href="@{/style.css}" type="text/css">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var currentFieldRowNumber = 0;
+            var currentGroupNumber = 0;
+
+            $('#createAssessmentButton').on('click', function () {
+                var fieldGroups = [];
+
+                $(".fieldGroup").each(
+                    function (index) {
+                        let groupTitle = $(this).find('.groupTitle').val();
+                        let groupDescription = $(this).find('.groupDescription').val();
+                        var fieldGroup = {
+                            title: groupTitle,
+                            description: groupDescription,
+                            evaluationFields: []
+                        }
+
+                        $(this).find('.fieldRow').each(
+                            function (index) {
+                                let fieldName = $(this).find('.fieldName').val();
+                                let fieldDescription = $(this).find('.fieldDescription').val();
+                                var fieldRow = {name: fieldName, description: fieldDescription}
+                                fieldGroup.evaluationFields.push(fieldRow);
+                            });
+
+                        fieldGroups.push(fieldGroup);
+                        console.log(JSON.stringify(fieldGroups));
+                    });
+
+                let assessmentTitle = $("#inputAssessmentTitle").val();
+                let assessmentPosition = $("#inputAssessmentPosition").val();
+                let assessmentDescription = $("#assessmentDescriptionTextArea").val();
+
+                var assessment = {
+                    title: assessmentTitle,
+                    isTemplate: true,
+                    description: assessmentDescription,
+                    jobPosition: assessmentPosition,
+                    evaluationGroupList: fieldGroups
+                }
+
+                $.ajax({
+                    method: "POST",
+                    url: "/assessments/create",
+                    data: JSON.stringify(assessment),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    complete:function(response) {
+                        console.log(response);
+                        window.location = '/assessments';
+                    }
+                });
+
+            })
+
+            $("#addFieldRowButton-0").on('click', function () {
+                ++currentFieldRowNumber;
+                $("#evaluationFieldsRows-0").append('<div style="margin-top: 10px;" class="row fieldRow" id="evaluationFieldRow-' + currentFieldRowNumber + '">\n' +
+                    '                            <div class="col-3">\n' +
+                    '                                <label class="form-label" for="inputFieldName-' + currentFieldRowNumber + '">Field name</label>\n' +
+                    '                                <input class="form-control fieldName" id="inputFieldName-' + currentFieldRowNumber + '" type="text">\n' +
+                    '                            </div>\n' +
+                    '                            <div class="col-9">\n' +
+                    '                                <label class="form-label" for="inputFieldDescription-' + currentFieldRowNumber + '">Field description</label>\n' +
+                    '                                <div class="row">\n' +
+                    '                                    <div class="col-11">\n' +
+                    '                                        <input class="form-control fieldDescription" id="inputFieldDescription-' + currentFieldRowNumber + '" type="text">\n' +
+                    '                                    </div>\n' +
+                    '                                    <div class="col-1">\n' +
+                    '                                        <button class="btn btn-danger" id="removeFieldRowButton-' + currentFieldRowNumber + '" type="button"><i\n' +
+                    '                                                class="bi-trash" style="font-size: 1rem;"></i></button>\n' +
+                    '                                    </div>\n' +
+                    '                                </div>\n' +
+                    '                            </div>');
+
+                $("#removeFieldRowButton-" + currentFieldRowNumber).on('click', function () {
+                    $(this).parent('div').parent('div').parent('div').parent('div').remove();
+                })
+            });
+
+            $("#addFieldGroupButton-0").on('click', function () {
+                ++currentGroupNumber;
+                ++currentFieldRowNumber;
+                $("#fieldGroups").append(
+                    '<div id="fieldGroup-' + currentGroupNumber + '" class="card text-dark bg-light border-secondary fieldGroup" style="padding: 15px; margin-top: 15px;">\n' +
+                    '<div class="row">\n' +
+                    '                        <div class="col-3">\n' +
+                    '                            <label class="form-label" for="inputGroupTitle-' + currentGroupNumber + '">Group title</label>\n' +
+                    '                            <input class="form-control groupTitle" id="inputGroupTitle-' + currentGroupNumber + '" type="text">\n' +
+                    '                        </div>\n' +
+                    '                        <div class="col-9">\n' +
+                    '                                <label class="form-label" for="inputGroupDescription-' + currentGroupNumber + '">Group description</label>\n' +
+                    '                                <div class="row">\n' +
+                    '                                    <div class="col-11">\n' +
+                    '                                        <input class="form-control groupDescription" id="inputGroupDescription-' + currentGroupNumber + '" type="text">\n' +
+                    '                                    </div>\n' +
+                    '                                    <div class="col-1">\n' +
+                    '                                        <button class="btn btn-danger" id="removeGroupRowButton-' + currentGroupNumber + '" type="button"><i\n' +
+                    '                                                class="bi-trash" style="font-size: 1rem;"></i></button>\n' +
+                    '                                    </div>\n' +
+                    '                                </div>\n' +
+                    '                            </div>' +
+                    '                    </div>\n' +
+                    '                    <div style="margin: 15px 0px 0px;">\n' +
+                    '                        <div class="row">\n' +
+                    '                            <div class="col-10">\n' +
+                    '                                <div class="alert alert-secondary">Evaluation fields</div>\n' +
+                    '                            </div>\n' +
+                    '                            <div class="col-2">\n' +
+                    '                                <button class="btn btn-success" id="addFieldRowButton-' + currentGroupNumber + '" style="height: 80%; width: 100%;"\n' +
+                    '                                        type="button"><i\n' +
+                    '                                        class="bi-plus" style="font-size: 1rem;"></i></button>\n' +
+                    '                            </div>\n' +
+                    '                        </div>\n' +
+                    '                        <div class="fieldRows" id="evaluationFieldsRows-' + currentGroupNumber + '">\n' +
+                    '                            <div class="row fieldRow" id="evaluationFieldRow-' + currentFieldRowNumber + '">\n' +
+                    '                                <div class="col-3">\n' +
+                    '                                    <label class="form-label" for="inputFieldName-' + currentFieldRowNumber + '">Field name</label>\n' +
+                    '                                    <input class="form-control fieldName" id="inputFieldName-' + currentFieldRowNumber + '" type="text">\n' +
+                    '                                </div>\n' +
+                    '                                <div class="col-9">\n' +
+                    '                                    <label class="form-label" for="inputFieldDescription-' + currentFieldRowNumber + '">Field description</label>\n' +
+                    '                                    <input class="form-control fieldDescription" id="inputFieldDescription-' + currentFieldRowNumber + '" type="text">\n' +
+                    '                                </div>\n' +
+                    '                            </div>\n' +
+                    '                        </div>\n' +
+                    '                    </div>\n' +
+                    '</div>');
+
+                $("#addFieldRowButton-" + currentGroupNumber).on('click', function () {
+                     ++currentFieldRowNumber;
+                     console.log('currentGroupNumber-' + currentGroupNumber)
+                     console.log('currentFieldRowNumber-' + currentFieldRowNumber)
+                    $("#evaluationFieldsRows-" + currentGroupNumber).append(
+                        '<div style="margin-top: 10px;" class="row fieldRow" id="evaluationFieldRow-' + currentFieldRowNumber + '">\n' +
+                        '                            <div class="col-3">\n' +
+                        '                                <label class="form-label" for="inputFieldName-' + currentFieldRowNumber + '">Field name</label>\n' +
+                        '                                <input class="form-control fieldName" id="inputFieldName-' + currentFieldRowNumber + '" type="text">\n' +
+                        '                            </div>\n' +
+                        '                            <div class="col-9">\n' +
+                        '                                <label class="form-label" for="inputFieldDescription-' + currentFieldRowNumber + '">Field description</label>\n' +
+                        '                                <div class="row">\n' +
+                        '                                    <div class="col-11">\n' +
+                        '                                        <input class="form-control fieldDescription" id="inputFieldDescription-' + currentFieldRowNumber + '" type="text">\n' +
+                        '                                    </div>\n' +
+                        '                                    <div class="col-1">\n' +
+                        '                                        <button class="btn btn-danger" id="removeFieldRowButton-' + currentFieldRowNumber + '" type="button"><i\n' +
+                        '                                                class="bi-trash" style="font-size: 1rem;"></i></button>\n' +
+                        '                                    </div>\n' +
+                        '                                </div>\n' +
+                        '                            </div>');
+
+                    $("#removeFieldRowButton-" + currentFieldRowNumber).on('click', function () {
+                        $(this).parent('div').parent('div').parent('div').parent('div').remove();
+                    })
+                })
+
+                $("#removeGroupRowButton-" + currentGroupNumber).on('click', function () {
+                    $(this).parent('div').parent('div').parent('div').parent('div').parent('div').remove();
+                })
+
+            })
+
+        });
+    </script>
+    <title>eval-e | assessments</title>
+</head>
+<body>
+<div class="alert alert-info" role="alert">
+    <h2>eval-e | create assessment</h2>
+</div>
+<div>
+    <div class="card" style="margin-bottom: 15px;">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                        class="navbar-toggler" data-bs-target="#navbarSupportedContent"
+                        data-bs-toggle="collapse" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/}">[users]</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/assessments}">[assessments]</a>
+                        </li>
+                        <li class="nav-item">
+                            <a aria-disabled="true" class="nav-link disabled" href="#" tabindex="-1">Disabled</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex">
+                        <input aria-label="Search" class="form-control me-2" placeholder="Search" type="search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="card" style="margin-bottom: 15px; padding: 15px;">
+        <form class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label" for="inputAssessmentTitle">Title</label>
+                <input class="form-control" id="inputAssessmentTitle" type="text">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="assessmentDescriptionTextArea">Description</label>
+                <textarea class="form-control" id="assessmentDescriptionTextArea" rows="3"></textarea>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label" for="inputAssessmentPosition">Position</label>
+                <select class="form-select" id="inputAssessmentPosition">
+                    <div th:each="jp : ${jobPositions}">
+                        <option th:text="${jp}" th:value="${jp}"></option>
+                    </div>
+                </select>
+            </div>
+            <div class="card text-dark bg-light" style="margin-bottom: 15px; padding: 15px;">
+                <div class="row">
+                    <div class="col-10">
+                        <div class="alert alert-secondary">Evaluation groups</div>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-success" id="addFieldGroupButton-0" style="height: 80%; width: 100%;"
+                                type="button"><i
+                                class="bi-plus" style="font-size: 1rem;"></i></button>
+                    </div>
+                </div>
+                <div id="fieldGroups">
+                    <div class="card text-dark bg-light border-secondary fieldGroup" id="fieldGroup-0"
+                         style="padding: 15px;">
+                        <div class="row">
+                            <div class="col-3">
+                                <label class="form-label" for="inputGroupTitle-0">Group title</label>
+                                <input class="form-control groupTitle" id="inputGroupTitle-0" type="text">
+                            </div>
+                            <div class="col-9">
+                                <label class="form-label" for="inputGroupDescription-0">Group description</label>
+                                <input class="form-control groupDescription" id="inputGroupDescription-0" type="text">
+                            </div>
+                        </div>
+                        <div style="margin: 15px 0px 0px;">
+                            <div class="row">
+                                <div class="col-10">
+                                    <div class="alert alert-secondary">Evaluation fields</div>
+                                </div>
+                                <div class="col-2">
+                                    <button class="btn btn-success" id="addFieldRowButton-0"
+                                            style="height: 80%; width: 100%;"
+                                            type="button"><i
+                                            class="bi-plus" style="font-size: 1rem;"></i></button>
+                                </div>
+                            </div>
+                            <div class="fieldRows" id="evaluationFieldsRows-0">
+                                <div class="row fieldRow" id="evaluationFieldRow-0">
+                                    <div class="col-3">
+                                        <label class="form-label" for="inputFieldName-0">Field name</label>
+                                        <input class="form-control fieldName" id="inputFieldName-0" type="text">
+                                    </div>
+                                    <div class="col-9">
+                                        <label class="form-label" for="inputFieldDescription-0">Field
+                                            description</label>
+                                        <input class="form-control fieldDescription" id="inputFieldDescription-0"
+                                               type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <button class="btn btn-primary" type="button" id="createAssessmentButton">Create</button>
+            </div>
+        </form>
+    </div>
+
+
+</div>
+
+</body>
+</html>

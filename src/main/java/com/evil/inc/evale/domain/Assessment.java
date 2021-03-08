@@ -5,10 +5,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -22,14 +24,16 @@ import java.util.List;
 @Entity
 @Table(name = "ASSESSMENTS")
 public class Assessment extends AbstractEntity {
+    @Column(length = 1000)
     private String title;
+    @Lob
     private String description;
     @Enumerated(EnumType.STRING)
     private JobPosition jobPosition;
     @Enumerated(EnumType.STRING)
     private AssessmentStatus assessmentStatus = AssessmentStatus.FIRST_PHASE;
     private Long overallScore;
-    private boolean isTemplate;
+    private boolean isTemplate = true;
 
     private LocalDate startDate = LocalDate.now();
     private LocalDate endDate;

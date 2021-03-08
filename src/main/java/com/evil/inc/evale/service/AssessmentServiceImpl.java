@@ -23,6 +23,8 @@ class AssessmentServiceImpl implements AssessmentService {
     @Transactional
     @Override
     public void create(Assessment assessment) {
+        assessment.getEvaluationGroupList().forEach(g -> g.setAssessment(assessment));
+        assessment.getEvaluationGroupList().forEach(g -> g.getEvaluationFields().forEach(f -> f.setEvaluationGroup(g)));
         assessmentRepository.save(assessment);
     }
 

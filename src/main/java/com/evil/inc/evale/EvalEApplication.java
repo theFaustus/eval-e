@@ -36,22 +36,22 @@ public class EvalEApplication {
     @Transactional
     public CommandLineRunner commandLineRunner(AssessmentService assessmentService, UserService userService, AssessmentRepository assessmentRepository) {
         return args -> {
-            final Assessment templateAssessment = new Assessment("3.b Service Software Engineer Medior",
-                                                                 "Medior grade evaluation form",
-                                                                 JobPosition.SENIOR,
-                                                                 null,
-                                                                 true, null, null);
-
-            final EvaluationGroup coreTasks = new EvaluationGroup("Core tasks", "Lorem ipsum");
-            coreTasks.addEvaluationField(new EvaluationField("Acquiring and managing knowledge", "Gain knowledge of the IPC system, technologies we use, business logic, procedures."));
-            final EvaluationGroup skills = new EvaluationGroup("Skills", "Lorem Ipsum");
-            skills.addEvaluationField(new EvaluationField("Organize/planning/prioritize", "Effectively set goals and priorities, determine actions to reach those goals."));
-
-            templateAssessment.addEvaluationGroup(coreTasks);
-            templateAssessment.addEvaluationGroup(skills);
-
-            assessmentService.create(templateAssessment);
-            log.info("Template assessment created {}", templateAssessment);
+//            final Assessment templateAssessment = new Assessment("3.b Service Software Engineer Medior",
+//                                                                 "Medior grade evaluation form",
+//                                                                 JobPosition.SENIOR,
+//                                                                 null,
+//                                                                 true, null, null);
+//
+//            final EvaluationGroup coreTasks = new EvaluationGroup("Core tasks", "Lorem ipsum");
+//            coreTasks.addEvaluationField(new EvaluationField("Acquiring and managing knowledge", "Gain knowledge of the IPC system, technologies we use, business logic, procedures."));
+//            final EvaluationGroup skills = new EvaluationGroup("Skills", "Lorem Ipsum");
+//            skills.addEvaluationField(new EvaluationField("Organize/planning/prioritize", "Effectively set goals and priorities, determine actions to reach those goals."));
+//
+//            templateAssessment.addEvaluationGroup(coreTasks);
+//            templateAssessment.addEvaluationGroup(skills);
+//
+//            assessmentService.create(templateAssessment);
+//            log.info("Template assessment created {}", templateAssessment);
 
 
         };

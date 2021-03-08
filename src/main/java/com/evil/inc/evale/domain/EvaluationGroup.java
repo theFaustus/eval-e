@@ -5,9 +5,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -20,7 +22,10 @@ import java.util.List;
 @Entity
 @Table(name = "EVALUATION_GROUPS")
 public class EvaluationGroup extends AbstractEntity{
+    @Column(length = 1000)
     private String title;
+
+    @Lob
     private String description;
 
     private int groupOrder;
@@ -52,7 +57,7 @@ public class EvaluationGroup extends AbstractEntity{
         return "EvaluationGroup{" +
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", assessment=" + assessment.getId() +
+                ", assessment=" + (assessment != null ? assessment.getId() : "n/a") +
                 ", evaluationFields=" + evaluationFields +
                 '}';
     }

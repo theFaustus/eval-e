@@ -1,5 +1,7 @@
 package com.evil.inc.evale.web;
 
+import com.evil.inc.evale.domain.Assessment;
+import com.evil.inc.evale.domain.JobPosition;
 import com.evil.inc.evale.domain.User;
 import com.evil.inc.evale.service.AssessmentService;
 import com.evil.inc.evale.service.UserService;
@@ -7,6 +9,8 @@ import com.evil.inc.evale.service.dto.AssessmentSummaryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,5 +29,19 @@ public class AssessmentController {
         final ModelAndView modelAndView = new ModelAndView("assessments");
         modelAndView.addObject("assessments", all);
         return modelAndView;
+    }
+
+    @GetMapping("/create")
+    public ModelAndView viewCreateAssessment(){
+        final List<AssessmentSummaryDto> all = assessmentService.getAll();
+        final ModelAndView modelAndView = new ModelAndView("create-assessment");
+        modelAndView.addObject("jobPositions", JobPosition.values());
+        return modelAndView;
+    }
+
+    @PostMapping("/create")
+    public ModelAndView createAssessment(@RequestBody Assessment assessment){
+        assessmentService.create(assessment);
+        return new ModelAndView("redirect:/assessments");
     }
 }

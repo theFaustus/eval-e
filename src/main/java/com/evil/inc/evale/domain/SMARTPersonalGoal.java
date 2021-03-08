@@ -1,6 +1,5 @@
 package com.evil.inc.evale.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -8,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -18,10 +18,15 @@ import javax.persistence.Table;
 @Table(name = "SMART_PERSONAL_GOALS")
 public class SMARTPersonalGoal extends AbstractEntity {
     //TODO provide field description
+    @Lob
     private String specificField;
+    @Lob
     private String measurableField;
+    @Lob
     private String achievableField;
+    @Lob
     private String relevantField;
+    @Lob
     private String timeBoundField;
 
     @ManyToOne(fetch = FetchType.LAZY)

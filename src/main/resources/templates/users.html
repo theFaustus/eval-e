@@ -23,12 +23,47 @@
     <h2>eval-e | users</h2>
 </div>
 <div>
+
     <div class="card" style="margin-bottom: 15px;">
-        <blockquote class="blockquote mb-0 card-body">
-            <form th:action="@{/assessments}">
-                <input class="btn btn-primary" type="submit" value="Manage assessments" />
-            </form>
-        </blockquote>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                        class="navbar-toggler" data-bs-target="#navbarSupportedContent"
+                        data-bs-toggle="collapse" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/}">[users]</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/assessments}">[assessments]</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                               id="navbarDropdown" role="button">
+                                Options
+                            </a>
+                            <ul aria-labelledby="navbarDropdown" class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Create</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a aria-disabled="true" class="nav-link disabled" href="#" tabindex="-1">Disabled</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex">
+                        <input aria-label="Search" class="form-control me-2" placeholder="Search" type="search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
     </div>
     <div th:if="${users.isEmpty()}">
         <div style="display: flex; align-content: center; justify-content: center;">
@@ -46,11 +81,11 @@
                             class="badge bg-warning text-dark" th:text="${user.jobPosition}">Warning</span></h5>
                     <p class="card-text" th:text="${user.firstName + ' ' + user.lastName}"></p>
                     <footer class="blockquote-footer">
-                        <small class="text-muted"  th:text="${user.email}"></small>
+                        <small class="text-muted" th:text="${user.email}"></small>
                     </footer>
-                    <button type="button" class="btn btn-secondary">Assessments</button>
-                    <button type="button" class="btn btn-success">Assess</button>
-                    <button type="button" class="btn btn-danger">Delete</button>
+                    <button class="btn btn-secondary" type="button">Assessments</button>
+                    <button class="btn btn-success" type="button">Assess</button>
+                    <button class="btn btn-danger" type="button">Delete</button>
                 </blockquote>
             </div>
         </div>

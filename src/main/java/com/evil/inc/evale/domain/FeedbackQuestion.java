@@ -9,6 +9,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -18,6 +19,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "FEEDBACK_QUESTIONS")
 public class FeedbackQuestion extends AbstractEntity {
+    @Lob
     private String text;
     @Enumerated(EnumType.STRING)
     private FeedbackAnswer feedbackAnswer;
