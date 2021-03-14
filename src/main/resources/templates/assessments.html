@@ -85,7 +85,7 @@
                     <footer class="blockquote-footer">
                         <small class="text-muted"  th:text="${assessment.startDate + '/' + assessment.endDate}"></small>
                     </footer>
-                    <button type="button" class="btn btn-secondary">View</button>
+                    <a class="btn btn-secondary" th:href="@{'/assessments/' + ${assessment.id}}">View</a>
                     <button type="button" class="btn btn-secondary">Edit</button>
                     <button type="button" class="btn btn-danger">Delete</button>
                 </blockquote>

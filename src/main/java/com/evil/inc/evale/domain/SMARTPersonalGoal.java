@@ -43,9 +43,24 @@ public class SMARTPersonalGoal extends AbstractEntity {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SMARTPersonalGoal that = (SMARTPersonalGoal) o;
+        return that.id == this.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
+    @Override
     public String toString() {
         return "SMARTPersonalGoal{" +
-                "specificField='" + specificField + '\'' +
+                "id=" + id +
+                ", specificField='" + specificField + '\'' +
                 ", measurableField='" + measurableField + '\'' +
                 ", achievableField='" + achievableField + '\'' +
                 ", relevantField='" + relevantField + '\'' +

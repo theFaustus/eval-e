@@ -3,6 +3,7 @@ package com.evil.inc.evale.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -28,9 +29,10 @@ public class Feedback extends AbstractEntity{
     private boolean isAnonymous;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     private String comment;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "author_id")
     private User author;
 
@@ -57,7 +59,8 @@ public class Feedback extends AbstractEntity{
     @Override
     public String toString() {
         return "Feedback{" +
-                "questions=" + questions +
+                "id=" + id +
+                ", questions=" + questions +
                 ", isAnonymous=" + isAnonymous +
                 ", comment='" + comment + '\'' +
                 ", author=" + author.getUsername() +

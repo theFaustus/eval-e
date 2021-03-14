@@ -3,6 +3,7 @@ package com.evil.inc.evale.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -20,6 +21,7 @@ import javax.persistence.Table;
 @Table(name = "FEEDBACK_QUESTIONS")
 public class FeedbackQuestion extends AbstractEntity {
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     private String text;
     @Enumerated(EnumType.STRING)
     private FeedbackAnswer feedbackAnswer;
@@ -34,9 +36,25 @@ public class FeedbackQuestion extends AbstractEntity {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        FeedbackQuestion that = (FeedbackQuestion) o;
+        return that.id == this.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
+
+    @Override
     public String toString() {
         return "FeedbackQuestion{" +
-                "text='" + text + '\'' +
+                "id=" + id +
+                ", text='" + text + '\'' +
                 ", feedbackAnswer=" + feedbackAnswer +
                 ", feedback=" + feedback.getId() +
                 '}';

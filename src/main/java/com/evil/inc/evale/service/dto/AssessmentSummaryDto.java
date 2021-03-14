@@ -13,6 +13,7 @@ import java.time.LocalDate;
 
 @Data
 public class AssessmentSummaryDto {
+    private long id;
     private String title;
     private String description;
     private JobPosition jobPosition;

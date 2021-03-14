@@ -40,6 +40,7 @@ class AssessmentServiceImpl implements AssessmentService {
     @Transactional
     @Override
     public List<AssessmentSummaryDto> getAll() {
-        return assessmentRepository.findAll().stream().map(assessmentMapper::toAssessmentSummaryDto).collect(Collectors.toList());
+        final List<Assessment> assessments = assessmentRepository.findAll();
+        return assessments.stream().map(assessmentMapper::toAssessmentSummaryDto).collect(Collectors.toList());
     }
 }

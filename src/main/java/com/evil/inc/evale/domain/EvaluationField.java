@@ -3,6 +3,7 @@ package com.evil.inc.evale.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,6 +23,7 @@ public class EvaluationField extends AbstractEntity{
     private String name;
     private Long value;
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     private String description;
 
     private int fieldOrder;
@@ -38,12 +40,25 @@ public class EvaluationField extends AbstractEntity{
         this.description = description;
     }
 
-    //TODO equals and hashcode
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        EvaluationField that = (EvaluationField) o;
+        return that.id == this.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 
     @Override
     public String toString() {
         return "EvaluationField{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", value=" + value +
                 ", description='" + description + '\'' +
                 ", comment='" + comment + '\'' +

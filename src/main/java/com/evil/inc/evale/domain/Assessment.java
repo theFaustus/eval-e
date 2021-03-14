@@ -3,6 +3,7 @@ package com.evil.inc.evale.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,6 +18,7 @@ import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -27,6 +29,7 @@ public class Assessment extends AbstractEntity {
     @Column(length = 1000)
     private String title;
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     private String description;
     @Enumerated(EnumType.STRING)
     private JobPosition jobPosition;
@@ -122,9 +125,24 @@ public class Assessment extends AbstractEntity {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Assessment that = (Assessment) o;
+        return that.id == this.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
+    @Override
     public String toString() {
         return "Assessment{" +
-                "title='" + title + '\'' +
+                "id=" + id +
+                ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", grade=" + jobPosition +
                 ", assessmentStatus=" + assessmentStatus +

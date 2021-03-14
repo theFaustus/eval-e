@@ -45,9 +45,38 @@ public class User extends AbstractEntity {
         this.jobPosition = jobPosition;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        User that = (User) o;
+        return that.id == this.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
+
     public void addAssessment(Assessment assessment){
         assessments.add(assessment);
         assessment.setAssessedUser(this);
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
+                ", jobPosition=" + jobPosition +
+                ", assessments=" + assessments +
+                '}';
+    }
 }

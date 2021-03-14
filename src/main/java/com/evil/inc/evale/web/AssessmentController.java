@@ -9,6 +9,7 @@ import com.evil.inc.evale.service.dto.AssessmentSummaryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,16 @@ public class AssessmentController {
         final List<AssessmentSummaryDto> all = assessmentService.getAll();
         final ModelAndView modelAndView = new ModelAndView("assessments");
         modelAndView.addObject("assessments", all);
+        return modelAndView;
+    }
+
+
+    @GetMapping("/{assessmentId}")
+    public ModelAndView viewAssessment(@PathVariable Long assessmentId){
+        final Assessment assessment = assessmentService.getById(assessmentId);
+        final ModelAndView modelAndView = new ModelAndView("view-assessment");
+        modelAndView.addObject("assessment", assessment);
+        modelAndView.addObject("jobPositions", JobPosition.values());
         return modelAndView;
     }
 
