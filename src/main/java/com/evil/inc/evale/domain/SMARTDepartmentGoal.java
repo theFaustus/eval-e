@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,14 +21,19 @@ import javax.persistence.Table;
 public class SMARTDepartmentGoal extends AbstractEntity {
     //TODO provide field description
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     private String specificField;
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     private String measurableField;
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     private String achievableField;
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     private String relevantField;
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     private String timeBoundField;
 
     @ManyToOne(fetch = FetchType.LAZY)
