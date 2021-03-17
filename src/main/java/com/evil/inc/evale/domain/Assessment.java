@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
+
 @NoArgsConstructor
 @Entity
 @Table(name = "ASSESSMENTS")

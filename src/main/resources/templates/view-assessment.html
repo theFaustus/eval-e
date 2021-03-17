@@ -137,7 +137,7 @@
                     '                    <div style="margin: 15px 0px 0px;">\n' +
                     '                        <div class="row">\n' +
                     '                            <div class="col-10">\n' +
-                    '                                <div class="alert alert-secondary" style="border: 2px solid green;">Evaluation fields</div>\n' +
+                    '                                <div class="alert alert-secondary">Evaluation fields</div>\n' +
                     '                            </div>\n' +
                     '                            <div class="col-2">\n' +
                     '                                <button class="btn btn-success" id="addFieldRowButton-' + currentGroupNumber + '" style="height: 80%; width: 100%;"\n' +
@@ -249,43 +249,55 @@
                        type="text">
             </div>
 
-            <div id="fieldGroups">
-                <div class="card text-dark bg-light fieldGroup" id="fieldGroup-0"
-                     style="padding: 15px; margin-top: 15px; border: 2px solid #0d6efd;"
-                     th:each="group : ${assessment.getEvaluationGroupList()}">
-                    <div class="row">
-                        <div class="col-3">
-                            <input class="form-control groupTitle" disabled id="inputGroupTitle-0"
-                                   th:value="${group.title}" type="text">
-                        </div>
-                        <div class="col-9">
-                            <input class="form-control groupDescription" disabled id="inputGroupDescription-0"
-                                   th:value="${group.description}" type="text">
+            <div class="card" style="margin-bottom: 15px; padding: 15px;">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-secondary">Evalution groups
                         </div>
                     </div>
-                    <div style="margin: 15px 0px 0px;">
+                </div>
+                <div id="fieldGroups">
+                    <div class="card text-dark bg-light fieldGroup" id="fieldGroup-0"
+                         style="padding: 15px; margin-top: 15px;"
+                         th:each="group : ${assessment.getEvaluationGroupList()}">
                         <div class="row">
-                            <div class="col-12">
-                                <div class="alert alert-secondary" style="border: 2px solid green;">Evaluation fields
-                                </div>
+                            <div class="col-3">
+                                <input class="form-control groupTitle" disabled id="inputGroupTitle-0"
+                                       th:value="${group.title}" type="text">
                             </div>
-                            <!--                                <div class="col-2">-->
-                            <!--                                    <button class="btn btn-success" id="addFieldRowButton-0"-->
-                            <!--                                            style="height: 80%; width: 100%;"-->
-                            <!--                                            type="button"><i-->
-                            <!--                                            class="bi-plus" style="font-size: 1rem;"></i></button>-->
-                            <!--                                </div>-->
+                            <div class="col-9">
+                                <textarea class="form-control groupDescription" disabled id="inputGroupDescription-0"
+                                          th:text="${group.description}" type="text"></textarea>
+                            </div>
                         </div>
-                        <div class="fieldRows" id="evaluationFieldsRows-0" style="margin-top: 15px"
-                             th:each="field : ${group.evaluationFields}">
-                            <div class="row fieldRow" id="evaluationFieldRow-0">
-                                <div class="col-3">
-                                    <input class="form-control fieldName" disabled id="inputFieldName-0"
-                                           th:value="${field.name}" type="text">
+                        <div style="margin: 15px 0px 0px;">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="alert alert-secondary">Evaluation fields
+                                    </div>
                                 </div>
-                                <div class="col-9">
-                                    <input class="form-control fieldDescription" disabled
-                                           id="inputFieldDescription-0" th:value="${field.description}" type="text">
+                                <!--                                <div class="col-2">-->
+                                <!--                                    <button class="btn btn-success" id="addFieldRowButton-0"-->
+                                <!--                                            style="height: 80%; width: 100%;"-->
+                                <!--                                            type="button"><i-->
+                                <!--                                            class="bi-plus" style="font-size: 1rem;"></i></button>-->
+                                <!--                                </div>-->
+                            </div>
+                            <div class="fieldRows" id="evaluationFieldsRows-0" style="margin-top: 15px"
+                                 th:each="field : ${group.evaluationFields}">
+                                <div class="row fieldRow" id="evaluationFieldRow-0">
+                                    <div class="col-2">
+                                        <input class="form-control fieldName" disabled id="inputFieldName-0"
+                                               th:value="${field.name}" type="text">
+                                    </div>
+                                    <div class="col-1">
+                                        <input class="form-control fieldValue" disabled id="inputFieldValue-0"
+                                               th:value="${field.value}" type="text">
+                                    </div>
+                                    <div class="col-9">
+                                        <textarea class="form-control fieldDescription" disabled
+                                                  id="inputFieldDescription-0" th:text="${field.description}" type="text"></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -297,7 +309,7 @@
                 <div>
                     <div class="row">
                         <div class="col-12">
-                            <div class="alert alert-secondary" style="border: 2px solid green;">Feedback
+                            <div class="alert alert-secondary">Feedback
                             </div>
                         </div>
                     </div>
@@ -350,7 +362,7 @@
                 <div>
                     <div class="row">
                         <div class="col-12">
-                            <div class="alert alert-secondary" style="border: 2px solid green;">Personal goals
+                            <div class="alert alert-secondary">Personal goals
                             </div>
                         </div>
                     </div>
@@ -359,27 +371,42 @@
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between align-items-center"
                                 th:each="goal : ${assessment.personalGoals}">
-                                <span tabindex="0" class="badge bg-primary rounded-pill" data-bs-trigger="focus" data-bs-toggle="popover" title="S: Specific" data-bs-content="In order for a goal to be effective, it needs to be specific – don’t be afraid to dig into those nitty-gritty details. A specific goal answers questions like: What objective needs to be accomplished? Who is responsible for it? What steps will you take to achieve it?">S</span>
+                                <span class="badge bg-primary rounded-pill" data-bs-content="In order for a goal to be effective, it needs to be specific – don’t be afraid to dig into those nitty-gritty details. A specific goal answers questions like: What objective needs to be accomplished? Who is responsible for it? What steps will you take to achieve it?" data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="S: Specific">S</span>
                                 <div class="col-2">
                                     <textarea class="form-control specificField" disabled
-                                              id="specificField-0" type="text" th:text="${goal.specificField}"></textarea>
+                                              id="specificField-0" th:text="${goal.specificField}"
+                                              type="text"></textarea>
                                 </div>
-                                <span tabindex="0" class="badge bg-primary rounded-pill" data-bs-trigger="focus" data-bs-toggle="popover" title="M: Measurable" data-bs-content="Quantifying your goals (that is, making sure they’re measurable) makes it that much easier to track progress and know when you’ve reached the finish line.">M</span>
+                                <span class="badge bg-primary rounded-pill" data-bs-content="Quantifying your goals (that is, making sure they’re measurable) makes it that much easier to track progress and know when you’ve reached the finish line." data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="M: Measurable">M</span>
                                 <div class="col-2">
                                     <textarea class="form-control measurableField" disabled
-                                              id="measurableField-0" type="text" th:text="${goal.measurableField}"></textarea></div>
-                                <span tabindex="0" class="badge bg-primary rounded-pill" data-bs-trigger="focus" data-bs-toggle="popover" title="A: Achievable" data-bs-content="Goals should be realistic — not high pedestals from which you inevitably tumble. Achievability means ensuring that your goal is within reach (you’ll also sometimes see this letter representing “attainable”).">A</span>
+                                              id="measurableField-0" th:text="${goal.measurableField}"
+                                              type="text"></textarea></div>
+                                <span class="badge bg-primary rounded-pill" data-bs-content="Goals should be realistic — not high pedestals from which you inevitably tumble. Achievability means ensuring that your goal is within reach (you’ll also sometimes see this letter representing “attainable”)." data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="A: Achievable">A</span>
                                 <div class="col-2">
                                     <textarea class="form-control achievableField" disabled
-                                              id="achievableField-0" type="text" th:text="${goal.achievableField}"></textarea></div>
-                                <span tabindex="0" class="badge bg-primary rounded-pill" data-bs-trigger="focus" data-bs-toggle="popover" title="R: Relevant" data-bs-content="Nobody sets goals for the fun of it. There should be a real benefit attached to reaching your chosen objective. That’s what’s meant by “relevant” here. During this step, you evaluate why the goal matters to you and your organization. ">R</span>
+                                              id="achievableField-0" th:text="${goal.achievableField}"
+                                              type="text"></textarea></div>
+                                <span class="badge bg-primary rounded-pill" data-bs-content="Nobody sets goals for the fun of it. There should be a real benefit attached to reaching your chosen objective. That’s what’s meant by “relevant” here. During this step, you evaluate why the goal matters to you and your organization. " data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="R: Relevant">R</span>
                                 <div class="col-2">
                                     <textarea class="form-control relevantField" disabled
-                                              id="relevantField-0" type="text" th:text="${goal.relevantField}"></textarea></div>
-                                <span tabindex="0" class="badge bg-primary rounded-pill" data-bs-trigger="focus" data-bs-toggle="popover" title="T: Time-bound" data-bs-content="Good goals don’t stretch into infinity – they have a deadline. This is another important piece of measuring success. You and your team need to be on the same page about when a goal has been reached.">T</span>
+                                              id="relevantField-0" th:text="${goal.relevantField}"
+                                              type="text"></textarea></div>
+                                <span class="badge bg-primary rounded-pill" data-bs-content="Good goals don’t stretch into infinity – they have a deadline. This is another important piece of measuring success. You and your team need to be on the same page about when a goal has been reached." data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="T: Time-bound">T</span>
                                 <div class="col-2">
                                     <textarea class="form-control timeBoundField" disabled
-                                              id="timeBoundField-0" type="text" th:text="${goal.timeBoundField}"></textarea></div>
+                                              id="timeBoundField-0" th:text="${goal.timeBoundField}"
+                                              type="text"></textarea></div>
                             </li>
                         </ul>
                     </div>
@@ -391,7 +418,7 @@
                 <div>
                     <div class="row">
                         <div class="col-12">
-                            <div class="alert alert-secondary" style="border: 2px solid green;">Department goals
+                            <div class="alert alert-secondary">Department goals
                             </div>
                         </div>
                     </div>
@@ -400,27 +427,42 @@
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between align-items-center"
                                 th:each="goal : ${assessment.departmentGoals}">
-                                <span tabindex="0" class="badge bg-primary rounded-pill" data-bs-trigger="focus" data-bs-toggle="popover" title="S: Specific" data-bs-content="In order for a goal to be effective, it needs to be specific – don’t be afraid to dig into those nitty-gritty details. A specific goal answers questions like: What objective needs to be accomplished? Who is responsible for it? What steps will you take to achieve it?">S</span>
+                                <span class="badge bg-primary rounded-pill" data-bs-content="In order for a goal to be effective, it needs to be specific – don’t be afraid to dig into those nitty-gritty details. A specific goal answers questions like: What objective needs to be accomplished? Who is responsible for it? What steps will you take to achieve it?" data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="S: Specific">S</span>
                                 <div class="col-2">
                                     <textarea class="form-control depSpecificField" disabled
-                                              id="specificField-1" type="text" th:text="${goal.specificField}"></textarea>
+                                              id="specificField-1" th:text="${goal.specificField}"
+                                              type="text"></textarea>
                                 </div>
-                                <span tabindex="0" class="badge bg-primary rounded-pill" data-bs-trigger="focus" data-bs-toggle="popover" title="M: Measurable" data-bs-content="Quantifying your goals (that is, making sure they’re measurable) makes it that much easier to track progress and know when you’ve reached the finish line.">M</span>
+                                <span class="badge bg-primary rounded-pill" data-bs-content="Quantifying your goals (that is, making sure they’re measurable) makes it that much easier to track progress and know when you’ve reached the finish line." data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="M: Measurable">M</span>
                                 <div class="col-2">
                                     <textarea class="form-control depMeasurableField" disabled
-                                              id="measurableField-1" type="text" th:text="${goal.measurableField}"></textarea></div>
-                                <span tabindex="0" class="badge bg-primary rounded-pill" data-bs-trigger="focus" data-bs-toggle="popover" title="A: Achievable" data-bs-content="Goals should be realistic — not high pedestals from which you inevitably tumble. Achievability means ensuring that your goal is within reach (you’ll also sometimes see this letter representing “attainable”).">A</span>
+                                              id="measurableField-1" th:text="${goal.measurableField}"
+                                              type="text"></textarea></div>
+                                <span class="badge bg-primary rounded-pill" data-bs-content="Goals should be realistic — not high pedestals from which you inevitably tumble. Achievability means ensuring that your goal is within reach (you’ll also sometimes see this letter representing “attainable”)." data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="A: Achievable">A</span>
                                 <div class="col-2">
                                     <textarea class="form-control depAchievableField" disabled
-                                              id="achievableField-1" type="text" th:text="${goal.achievableField}"></textarea></div>
-                                <span tabindex="0" class="badge bg-primary rounded-pill" data-bs-trigger="focus" data-bs-toggle="popover" title="R: Relevant" data-bs-content="Nobody sets goals for the fun of it. There should be a real benefit attached to reaching your chosen objective. That’s what’s meant by “relevant” here. During this step, you evaluate why the goal matters to you and your organization. ">R</span>
+                                              id="achievableField-1" th:text="${goal.achievableField}"
+                                              type="text"></textarea></div>
+                                <span class="badge bg-primary rounded-pill" data-bs-content="Nobody sets goals for the fun of it. There should be a real benefit attached to reaching your chosen objective. That’s what’s meant by “relevant” here. During this step, you evaluate why the goal matters to you and your organization. " data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="R: Relevant">R</span>
                                 <div class="col-2">
                                     <textarea class="form-control depRelevantField" disabled
-                                              id="relevantField-1" type="text" th:text="${goal.relevantField}"></textarea></div>
-                                <span tabindex="0" class="badge bg-primary rounded-pill" data-bs-trigger="focus" data-bs-toggle="popover" title="T: Time-bound" data-bs-content="Good goals don’t stretch into infinity – they have a deadline. This is another important piece of measuring success. You and your team need to be on the same page about when a goal has been reached.">T</span>
+                                              id="relevantField-1" th:text="${goal.relevantField}"
+                                              type="text"></textarea></div>
+                                <span class="badge bg-primary rounded-pill" data-bs-content="Good goals don’t stretch into infinity – they have a deadline. This is another important piece of measuring success. You and your team need to be on the same page about when a goal has been reached." data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="T: Time-bound">T</span>
                                 <div class="col-2">
                                     <textarea class="form-control depTimeBoundField" disabled
-                                              id="timeBoundField-1" type="text" th:text="${goal.timeBoundField}"></textarea></div>
+                                              id="timeBoundField-1" th:text="${goal.timeBoundField}"
+                                              type="text"></textarea></div>
                             </li>
                         </ul>
                     </div>

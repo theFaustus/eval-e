@@ -15,7 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
+
 @NoArgsConstructor
 @Entity
 @Table(name = "FEEDBACK_QUESTIONS")

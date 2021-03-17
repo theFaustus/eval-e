@@ -14,14 +14,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
+
 @NoArgsConstructor
 @Entity
 @Table(name = "EVALUATION_FIELDS")
 public class EvaluationField extends AbstractEntity{
     @Column(length = 1000)
     private String name;
-    private Long value;
+    private long value;
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     private String description;

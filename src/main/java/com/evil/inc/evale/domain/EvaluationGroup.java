@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
+
 @NoArgsConstructor
 @Entity
 @Table(name = "EVALUATION_GROUPS")
