@@ -55,4 +55,13 @@ public class AssessmentController {
         assessmentService.create(assessment);
         return new ModelAndView("redirect:/assessments");
     }
+
+    @GetMapping("/edit/{assessmentId}")
+    public ModelAndView viewEditAssessment(@PathVariable Long assessmentId){
+        final Assessment assessment = assessmentService.getById(assessmentId);
+        final ModelAndView modelAndView = new ModelAndView("edit-assessment");
+        modelAndView.addObject("assessment", assessment);
+        modelAndView.addObject("jobPositions", JobPosition.values());
+        return modelAndView;
+    }
 }

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+          integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/9dfa6c6e5c.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link media="all" rel="stylesheet" th:href="@{/style.css}" type="text/css">
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+
+            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl)
+            })
+
+            function uuidv4() {
+                return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+                    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+                );
+            }
+
+            $(document).on("click", ".removeFieldButton", function () {
+                $(this).parent('div').parent('div').parent('div').remove();
+            })
+
+            $('#createAssessmentButton').on('click', function () {
+                var fieldGroups = [];
+
+                $(".fieldGroup").each(
+                    function (index) {
+                        let groupTitle = $(this).find('.groupTitle').val();
+                        let groupDescription = $(this).find('.groupDescription').val();
+                        var fieldGroup = {
+                            title: groupTitle,
+                            description: groupDescription,
+                            evaluationFields: []
+                        }
+
+                        $(this).find('.fieldRow').each(
+                            function (index) {
+                                let fieldName = $(this).find('.fieldName').val();
+                                let fieldDescription = $(this).find('.fieldDescription').val();
+                                var fieldRow = {name: fieldName, description: fieldDescription}
+                                fieldGroup.evaluationFields.push(fieldRow);
+                            });
+
+                        fieldGroups.push(fieldGroup);
+                        console.log(JSON.stringify(fieldGroups));
+                    });
+
+                let assessmentTitle = $("#inputAssessmentTitle").val();
+                let assessmentPosition = $("#inputAssessmentPosition").val();
+                let assessmentDescription = $("#assessmentDescriptionTextArea").val();
+
+                var assessment = {
+                    title: assessmentTitle,
+                    isTemplate: true,
+                    description: assessmentDescription,
+                    jobPosition: assessmentPosition,
+                    evaluationGroupList: fieldGroups
+                }
+
+                $.ajax({
+                    method: "POST",
+                    url: "/assessments/create",
+                    data: JSON.stringify(assessment),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    complete: function (response) {
+                        console.log(response);
+                        window.location = '/assessments';
+                    }
+                });
+
+            })
+
+            // $("#addFieldRowButton-0").on('click', function () {
+            //     var currentFieldRowNumber = uuidv4();
+            //     $("#evaluationFieldsRows-0").append('<div style="margin-top: 10px;" class="row fieldRow" id="evaluationFieldRow-' + currentFieldRowNumber + '">\n' +
+            //         '                            <div class="col-3">\n' +
+            //         '                                <label class="form-label" for="inputFieldName-' + currentFieldRowNumber + '">Field name</label>\n' +
+            //         '                                <input class="form-control fieldName" id="inputFieldName-' + currentFieldRowNumber + '" type="text">\n' +
+            //         '                            </div>\n' +
+            //         '                            <div class="col-9">\n' +
+            //         '                                <label class="form-label" for="inputFieldDescription-' + currentFieldRowNumber + '">Field description</label>\n' +
+            //         '                                <div class="row">\n' +
+            //         '                                    <div class="col-10">\n' +
+            //         '                                        <input class="form-control fieldDescription" id="inputFieldDescription-' + currentFieldRowNumber + '" type="text">\n' +
+            //         '                                    </div>\n' +
+            //         '                                    <div class="col-2">\n' +
+            //         '                                        <button class="btn btn-danger" id="removeFieldRowButton-' + currentFieldRowNumber + '" type="button"><i\n' +
+            //         '                                                class="bi-trash" style="font-size: 1rem; width: 100%;"></i></button>\n' +
+            //         '                                    </div>\n' +
+            //         '                                </div>\n' +
+            //         '                            </div>');
+            //
+            //     $("#removeFieldRowButton-" + currentFieldRowNumber).on('click', function () {
+            //         $(this).parent('div').parent('div').parent('div').remove();
+            //     })
+            // });
+            //
+            // $("#addFieldGroupButton-0").on('click', function () {
+            //     var currentGroupNumber = uuidv4();
+            //     var currentFieldRowNumber = uuidv4();
+            //     $("#fieldGroups").append(
+            //         '<div id="fieldGroup-' + currentGroupNumber + '" class="card text-dark bg-light border-secondary fieldGroup" style="padding: 15px; margin-top: 15px;">\n' +
+            //         '<div class="row">\n' +
+            //         '                        <div class="col-3">\n' +
+            //         '                            <label class="form-label" for="inputGroupTitle-' + currentGroupNumber + '">Group title</label>\n' +
+            //         '                            <input class="form-control groupTitle" id="inputGroupTitle-' + currentGroupNumber + '" type="text">\n' +
+            //         '                        </div>\n' +
+            //         '                        <div class="col-9">\n' +
+            //         '                                <label class="form-label" for="inputGroupDescription-' + currentGroupNumber + '">Group description</label>\n' +
+            //         '                                <div class="row">\n' +
+            //         '                                    <div class="col-10">\n' +
+            //         '                                        <input class="form-control groupDescription" id="inputGroupDescription-' + currentGroupNumber + '" type="text">\n' +
+            //         '                                    </div>\n' +
+            //         '                                    <div class="col-2">\n' +
+            //         '                                        <button class="btn btn-danger" id="removeGroupRowButton-' + currentGroupNumber + '" type="button"><i\n' +
+            //         '                                                class="bi-trash" style="font-size: 1rem; width: 100%;"></i></button>\n' +
+            //         '                                    </div>\n' +
+            //         '                                </div>\n' +
+            //         '                            </div>' +
+            //         '                    </div>\n' +
+            //         '                    <div style="margin: 15px 0px 0px;">\n' +
+            //         '                        <div class="row">\n' +
+            //         '                            <div class="col-10">\n' +
+            //         '                                <div class="alert alert-secondary">Evaluation fields</div>\n' +
+            //         '                            </div>\n' +
+            //         '                            <div class="col-2">\n' +
+            //         '                                <button class="btn btn-success" id="addFieldRowButton-' + currentGroupNumber + '" style="height: 80%; width: 100%;"\n' +
+            //         '                                        type="button"><i\n' +
+            //         '                                        class="bi-plus" style="font-size: 1rem;"></i></button>\n' +
+            //         '                            </div>\n' +
+            //         '                        </div>\n' +
+            //         '                        <div class="fieldRows" id="evaluationFieldsRows-' + currentGroupNumber + '">\n' +
+            //         '                            <div class="row fieldRow" id="evaluationFieldRow-' + currentFieldRowNumber + '">\n' +
+            //         '                                <div class="col-3">\n' +
+            //         '                                    <label class="form-label" for="inputFieldName-' + currentFieldRowNumber + '">Field name</label>\n' +
+            //         '                                    <input class="form-control fieldName" id="inputFieldName-' + currentFieldRowNumber + '" type="text">\n' +
+            //         '                                </div>\n' +
+            //         '                                <div class="col-9">\n' +
+            //         '                                    <label class="form-label" for="inputFieldDescription-' + currentFieldRowNumber + '">Field description</label>\n' +
+            //         '                                    <input class="form-control fieldDescription" id="inputFieldDescription-' + currentFieldRowNumber + '" type="text">\n' +
+            //         '                                </div>\n' +
+            //         '                            </div>\n' +
+            //         '                        </div>\n' +
+            //         '                    </div>\n' +
+            //         '</div>');
+            //
+            //     $("#addFieldRowButton-" + currentGroupNumber).on('click', function () {
+            //         currentFieldRowNumber = uuidv4();
+            //         console.log('currentGroupNumber-' + currentGroupNumber)
+            //         console.log('currentFieldRowNumber-' + currentFieldRowNumber)
+            //         $("#evaluationFieldsRows-" + currentGroupNumber).append(
+            //             '<div style="margin-top: 10px;" class="row fieldRow" id="evaluationFieldRow-' + currentFieldRowNumber + '">\n' +
+            //             '                            <div class="col-3">\n' +
+            //             '                                <label class="form-label" for="inputFieldName-' + currentFieldRowNumber + '">Field name</label>\n' +
+            //             '                                <input class="form-control fieldName" id="inputFieldName-' + currentFieldRowNumber + '" type="text">\n' +
+            //             '                            </div>\n' +
+            //             '                            <div class="col-9">\n' +
+            //             '                                <label class="form-label" for="inputFieldDescription-' + currentFieldRowNumber + '">Field description</label>\n' +
+            //             '                                <div class="row">\n' +
+            //             '                                    <div class="col-10">\n' +
+            //             '                                        <input class="form-control fieldDescription" id="inputFieldDescription-' + currentFieldRowNumber + '" type="text">\n' +
+            //             '                                    </div>\n' +
+            //             '                                    <div class="col-2">\n' +
+            //             '                                        <button class="btn btn-danger" id="removeFieldRowButton-' + currentFieldRowNumber + '" type="button"><i\n' +
+            //             '                                                class="bi-trash" style="font-size: 1rem; width: 100%;"></i></button>\n' +
+            //             '                                    </div>\n' +
+            //             '                                </div>\n' +
+            //             '                            </div>');
+            //
+            //         $("#removeFieldRowButton-" + currentFieldRowNumber).on('click', function () {
+            //             $(this).parent('div').parent('div').parent('div').parent('div').remove();
+            //         })
+            //     })
+            //
+            //     $("#removeGroupRowButton-" + currentGroupNumber).on('click', function () {
+            //         $(this).parent('div').parent('div').parent('div').parent('div').parent('div').remove();
+            //     })
+            //
+            // })
+
+        });
+    </script>
+    <title>eval-e | assessments</title>
+</head>
+<body>
+<div class="alert alert-info" role="alert">
+    <h2>eval-e | edit assessment</h2>
+</div>
+<div>
+    <div class="card" style="margin-bottom: 15px;">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                        class="navbar-toggler" data-bs-target="#navbarSupportedContent"
+                        data-bs-toggle="collapse" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/}">[users]</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/assessments}">[assessments]</a>
+                        </li>
+                        <li class="nav-item">
+                            <a aria-="true" class="nav-link " href="#" tabindex="-1">Disabled</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex">
+                        <input aria-label="Search" class="form-control me-2" placeholder="Search" type="search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="card" id="assessmentForm" style="margin-bottom: 15px; padding: 15px;">
+        <form class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label" for="inputAssessmentTitle">Title</label>
+                <input class="form-control" id="inputAssessmentTitle" th:value="${assessment.title}"
+                       type="text">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="assessmentDescriptionTextArea">Description</label>
+                <textarea class="form-control" id="assessmentDescriptionTextArea" rows="3"
+                          th:text="${assessment.description}"></textarea>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label" for="inputAssessmentPosition">Position</label>
+                <select class="form-select" id="inputAssessmentPosition">
+                    <div th:each="jp : ${jobPositions}">
+                        <option th:selected="${jp == assessment.jobPosition}" th:text="${jp}" th:value="${jp}"></option>
+                    </div>
+                </select>
+            </div>
+
+            <div class="card" style="margin-bottom: 15px; padding: 15px;">
+                <div class="row">
+                    <div class="col-10">
+                        <div class="alert alert-secondary">Evaluation groups
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-primary" id="addFieldGroupButton-0" style="height: 80%; width: 100%;"
+                                type="button"><i
+                                class="bi-plus" style="font-size: 1rem;"></i></button>
+                    </div>
+                </div>
+                <div id="fieldGroups">
+                    <div class="card text-dark bg-light fieldGroup" id="fieldGroup-0"
+                         style="padding: 15px; margin-top: 15px;"
+                         th:each="group : ${assessment.getEvaluationGroupList()}">
+                        <div class="row">
+                            <div class="col-3">
+                                <input class="form-control groupTitle" id="inputGroupTitle-0"
+                                       th:value="${group.title}" type="text">
+                            </div>
+                            <div class="col-9">
+                                <textarea class="form-control groupDescription" id="inputGroupDescription-0"
+                                          th:text="${group.description}" type="text"></textarea>
+                            </div>
+                        </div>
+                        <div style="margin: 15px 0px 0px;">
+                            <div class="row">
+                                <div class="col-10">
+                                    <div class="alert alert-secondary">Evaluation fields
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <button class="btn btn-success" id="addFieldRowButton-0"
+                                            style="height: 80%; width: 100%;"
+                                            type="button"><i
+                                            class="bi-plus" style="font-size: 1rem;"></i></button>
+                                </div>
+                            </div>
+                            <div class="fieldRows" id="evaluationFieldsRows-0" style="margin-top: 15px"
+                                 th:each="field : ${group.evaluationFields}">
+                                <div class="row fieldRow" id="evaluationFieldRow-0">
+                                    <div class="col-2">
+                                        <input class="form-control fieldName" id="inputFieldName-0"
+                                               th:value="${field.name}" type="text">
+                                    </div>
+                                    <div class="col-1">
+                                        <input class="form-control fieldValue" id="inputFieldValue-0"
+                                               th:value="${field.value}" type="text">
+                                    </div>
+                                    <div class="col-8">
+                                        <textarea class="form-control fieldDescription"
+                                                  id="inputFieldDescription-0" th:text="${field.description}"
+                                                  type="text"></textarea>
+                                    </div>
+                                    <div class="col-1">
+                                        <!--                                        TODO do not allow to delete the last element-->
+                                        <button class="btn btn-danger removeFieldButton"
+                                                th:id="'removeFieldRowButton-' + ${field.id}" type="button"><i
+                                                class="bi-trash" style="font-size: 1rem; width: 100%;"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: 15px; padding: 15px;">
+                <div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-secondary">Feedback
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feedbacksRows accordion" id="feedbacksRows-accordion-0" style="margin-top: 15px"
+                         th:each="feedback : ${assessment.feedbackList}">
+                        <div class="accordion-item">
+                            <button aria-controls="collapseQuestions" aria-expanded="false"
+                                    class="accordion-button collapsed"
+                                    data-bs-toggle="collapse" th:attr="data-bs-target='#accordion-' + ${feedback.id}"
+                                    type="button">
+                                <div class="row feedbackRow" id="feedbackRow-0"
+                                     style="width: 100%; margin-right: 10px;">
+                                    <div class="col-3">
+                                        <input class="form-control feedbackAuthor" id="feedbackAuthor-0"
+                                               th:value="${feedback.author.username}" type="text">
+                                    </div>
+                                    <div class="col-9">
+                                <textarea class="form-control feedbackName" id="inputFeedbackName-0"
+                                          th:text="${feedback.comment}"></textarea>
+                                    </div>
+                                </div>
+                            </button>
+                            <div aria-labelledby="headingOne" class="accordion-collapse collapse"
+                                 data-bs-parent="#feedbacksRows-accordion-0"
+                                 th:id="'accordion-' + ${feedback.id}">
+                                <div class="accordion-body">
+                                    <div class="questionRows" id="questionsRows-0" style="margin-top: 15px"
+                                         th:each="question : ${feedback.questions}">
+                                        <div class="row fieldRow" id="questionRow-0">
+                                            <div class="col-9">
+                                                <input class="form-control questionName"
+                                                       id="inputQuestionName-0"
+                                                       th:value="${question.text}" type="text">
+                                            </div>
+                                            <div class="col-3">
+                                                <input class="form-control questionDescription"
+                                                       id="inputQuestionDescription-0"
+                                                       th:value="${question.feedbackAnswer}" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: 15px; padding: 15px;">
+                <div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-secondary">Personal goals
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                th:each="goal : ${assessment.personalGoals}">
+                                <span class="badge bg-primary rounded-pill"
+                                      data-bs-content="In order for a goal to be effective, it needs to be specific – don’t be afraid to dig into those nitty-gritty details. A specific goal answers questions like: What objective needs to be accomplished? Who is responsible for it? What steps will you take to achieve it?"
+                                      data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="S: Specific">S</span>
+                                <div class="col-2">
+                                    <textarea class="form-control specificField"
+                                              id="specificField-0" th:text="${goal.specificField}"
+                                              type="text"></textarea>
+                                </div>
+                                <span class="badge bg-primary rounded-pill"
+                                      data-bs-content="Quantifying your goals (that is, making sure they’re measurable) makes it that much easier to track progress and know when you’ve reached the finish line."
+                                      data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="M: Measurable">M</span>
+                                <div class="col-2">
+                                    <textarea class="form-control measurableField"
+                                              id="measurableField-0" th:text="${goal.measurableField}"
+                                              type="text"></textarea></div>
+                                <span class="badge bg-primary rounded-pill"
+                                      data-bs-content="Goals should be realistic — not high pedestals from which you inevitably tumble. Achievability means ensuring that your goal is within reach (you’ll also sometimes see this letter representing “attainable”)."
+                                      data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="A: Achievable">A</span>
+                                <div class="col-2">
+                                    <textarea class="form-control achievableField"
+                                              id="achievableField-0" th:text="${goal.achievableField}"
+                                              type="text"></textarea></div>
+                                <span class="badge bg-primary rounded-pill"
+                                      data-bs-content="Nobody sets goals for the fun of it. There should be a real benefit attached to reaching your chosen objective. That’s what’s meant by “relevant” here. During this step, you evaluate why the goal matters to you and your organization. "
+                                      data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="R: Relevant">R</span>
+                                <div class="col-2">
+                                    <textarea class="form-control relevantField"
+                                              id="relevantField-0" th:text="${goal.relevantField}"
+                                              type="text"></textarea></div>
+                                <span class="badge bg-primary rounded-pill"
+                                      data-bs-content="Good goals don’t stretch into infinity – they have a deadline. This is another important piece of measuring success. You and your team need to be on the same page about when a goal has been reached."
+                                      data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="T: Time-bound">T</span>
+                                <div class="col-2">
+                                    <textarea class="form-control timeBoundField"
+                                              id="timeBoundField-0" th:text="${goal.timeBoundField}"
+                                              type="text"></textarea></div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: 15px; padding: 15px;">
+                <div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-secondary">Department goals
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                th:each="goal : ${assessment.departmentGoals}">
+                                <span class="badge bg-primary rounded-pill"
+                                      data-bs-content="In order for a goal to be effective, it needs to be specific – don’t be afraid to dig into those nitty-gritty details. A specific goal answers questions like: What objective needs to be accomplished? Who is responsible for it? What steps will you take to achieve it?"
+                                      data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="S: Specific">S</span>
+                                <div class="col-2">
+                                    <textarea class="form-control depSpecificField"
+                                              id="specificField-1" th:text="${goal.specificField}"
+                                              type="text"></textarea>
+                                </div>
+                                <span class="badge bg-primary rounded-pill"
+                                      data-bs-content="Quantifying your goals (that is, making sure they’re measurable) makes it that much easier to track progress and know when you’ve reached the finish line."
+                                      data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="M: Measurable">M</span>
+                                <div class="col-2">
+                                    <textarea class="form-control depMeasurableField"
+                                              id="measurableField-1" th:text="${goal.measurableField}"
+                                              type="text"></textarea></div>
+                                <span class="badge bg-primary rounded-pill"
+                                      data-bs-content="Goals should be realistic — not high pedestals from which you inevitably tumble. Achievability means ensuring that your goal is within reach (you’ll also sometimes see this letter representing “attainable”)."
+                                      data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="A: Achievable">A</span>
+                                <div class="col-2">
+                                    <textarea class="form-control depAchievableField"
+                                              id="achievableField-1" th:text="${goal.achievableField}"
+                                              type="text"></textarea></div>
+                                <span class="badge bg-primary rounded-pill"
+                                      data-bs-content="Nobody sets goals for the fun of it. There should be a real benefit attached to reaching your chosen objective. That’s what’s meant by “relevant” here. During this step, you evaluate why the goal matters to you and your organization. "
+                                      data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="R: Relevant">R</span>
+                                <div class="col-2">
+                                    <textarea class="form-control depRelevantField"
+                                              id="relevantField-1" th:text="${goal.relevantField}"
+                                              type="text"></textarea></div>
+                                <span class="badge bg-primary rounded-pill"
+                                      data-bs-content="Good goals don’t stretch into infinity – they have a deadline. This is another important piece of measuring success. You and your team need to be on the same page about when a goal has been reached."
+                                      data-bs-toggle="popover"
+                                      data-bs-trigger="focus" tabindex="0"
+                                      title="T: Time-bound">T</span>
+                                <div class="col-2">
+                                    <textarea class="form-control depTimeBoundField"
+                                              id="timeBoundField-1" th:text="${goal.timeBoundField}"
+                                              type="text"></textarea></div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" id="closeAssessmentButton" type="button">Close</button>
+            </div>
+        </form>
+    </div>
+
+
+</div>
+
+</body>
+</html>

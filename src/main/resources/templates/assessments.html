@@ -86,7 +86,7 @@
                         <small class="text-muted"  th:text="${assessment.startDate + '/' + assessment.endDate}"></small>
                     </footer>
                     <a class="btn btn-secondary" th:href="@{'/assessments/' + ${assessment.id}}">View</a>
-                    <button type="button" class="btn btn-secondary">Edit</button>
+                    <a class="btn btn-secondary" th:href="@{'/assessments/edit/' + ${assessment.id}}">Edit</a>
                     <button type="button" class="btn btn-danger">Delete</button>
                 </blockquote>
             </div>
