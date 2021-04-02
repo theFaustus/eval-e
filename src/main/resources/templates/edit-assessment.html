@@ -33,10 +33,6 @@
                 );
             }
 
-            $(document).on("click", ".removeFieldButton", function () {
-                $(this).parent('div').parent('div').parent('div').remove();
-            })
-
             $('#createAssessmentButton').on('click', function () {
                 var fieldGroups = [];
 
@@ -88,30 +84,38 @@
 
             })
 
-            // $("#addFieldRowButton-0").on('click', function () {
-            //     var currentFieldRowNumber = uuidv4();
-            //     $("#evaluationFieldsRows-0").append('<div style="margin-top: 10px;" class="row fieldRow" id="evaluationFieldRow-' + currentFieldRowNumber + '">\n' +
-            //         '                            <div class="col-3">\n' +
-            //         '                                <label class="form-label" for="inputFieldName-' + currentFieldRowNumber + '">Field name</label>\n' +
-            //         '                                <input class="form-control fieldName" id="inputFieldName-' + currentFieldRowNumber + '" type="text">\n' +
-            //         '                            </div>\n' +
-            //         '                            <div class="col-9">\n' +
-            //         '                                <label class="form-label" for="inputFieldDescription-' + currentFieldRowNumber + '">Field description</label>\n' +
-            //         '                                <div class="row">\n' +
-            //         '                                    <div class="col-10">\n' +
-            //         '                                        <input class="form-control fieldDescription" id="inputFieldDescription-' + currentFieldRowNumber + '" type="text">\n' +
-            //         '                                    </div>\n' +
-            //         '                                    <div class="col-2">\n' +
-            //         '                                        <button class="btn btn-danger" id="removeFieldRowButton-' + currentFieldRowNumber + '" type="button"><i\n' +
-            //         '                                                class="bi-trash" style="font-size: 1rem; width: 100%;"></i></button>\n' +
-            //         '                                    </div>\n' +
-            //         '                                </div>\n' +
-            //         '                            </div>');
-            //
-            //     $("#removeFieldRowButton-" + currentFieldRowNumber).on('click', function () {
-            //         $(this).parent('div').parent('div').parent('div').remove();
-            //     })
-            // });
+
+            $(document).on("click", ".removeFieldButton", function () {
+                $(this).parent('div').parent('div').parent('div').remove();
+            })
+            //TODO> think about the default value number, also when assessing the editing disable
+            $(document).on("click", ".addFieldRow", function () {
+                var buttonId = $(this).attr('id');
+                var currentFieldRowNumber = uuidv4();
+                $("#evaluationFieldsRows-" + buttonId).append('<div><div class="row fieldRow" style="margin-top: 15px;" id="evaluationFieldRow' + currentFieldRowNumber + '">\n' +
+                    '                                    <div class="col-2">\n' +
+                    '                                        <input class="form-control fieldName" id="inputFieldName' + currentFieldRowNumber + '"\n' +
+                    '                                               type="text">\n' +
+                    '                                    </div>\n' +
+                    '                                    <div class="col-1">\n' +
+                    '                                        <input class="form-control fieldValue" id="inputFieldValue' + currentFieldRowNumber + '"\n' +
+                    '                                               type="text">\n' +
+                    '                                    </div>\n' +
+                    '                                    <div class="col-8">\n' +
+                    '                                        <textarea class="form-control fieldDescription"\n' +
+                    '                                                  id="inputFieldDescription' + currentFieldRowNumber + '" type="text"></textarea>\n' +
+                    '                                    </div>\n' +
+                    '                                    <div class="col-1">\n' +
+                    '                                        <button class="btn btn-danger removeFieldButton"\n' +
+                    '                                                id="removeFieldRowButton-' + currentFieldRowNumber + '" type="button"><i\n' +
+                    '                                                class="bi-trash" style="font-size: 1rem; width: 100%;"></i></button>\n' +
+                    '                                    </div>\n' +
+                    '                                </div></div>');
+
+                $(document).on("click", ".removeFieldButton", function () {
+                    $(this).parent('div').parent('div').parent('div').remove();
+                })
+            });
             //
             // $("#addFieldGroupButton-0").on('click', function () {
             //     var currentGroupNumber = uuidv4();
@@ -287,33 +291,34 @@
                                     </div>
                                 </div>
                                 <div class="col-2">
-                                    <button class="btn btn-success" id="addFieldRowButton-0"
+                                    <button class="btn btn-success addFieldRow" th:id="${group.id}"
                                             style="height: 80%; width: 100%;"
                                             type="button"><i
                                             class="bi-plus" style="font-size: 1rem;"></i></button>
                                 </div>
                             </div>
-                            <div class="fieldRows" id="evaluationFieldsRows-0" style="margin-top: 15px"
-                                 th:each="field : ${group.evaluationFields}">
-                                <div class="row fieldRow" id="evaluationFieldRow-0">
-                                    <div class="col-2">
-                                        <input class="form-control fieldName" id="inputFieldName-0"
-                                               th:value="${field.name}" type="text">
-                                    </div>
-                                    <div class="col-1">
-                                        <input class="form-control fieldValue" id="inputFieldValue-0"
-                                               th:value="${field.value}" type="text">
-                                    </div>
-                                    <div class="col-8">
+                            <div class="fieldRows" th:id="'evaluationFieldsRows-' + ${group.id}" style="margin-top: 15px">
+                                <div th:each="field : ${group.evaluationFields}">
+                                    <div class="row fieldRow" th:id="'evaluationFieldRow-' + ${field.id}" style="margin-top: 15px">
+                                        <div class="col-2">
+                                            <input class="form-control fieldName" th:id="'inputFieldName-' + ${field.id}"
+                                                   th:value="${field.name}" type="text">
+                                        </div>
+                                        <div class="col-1">
+                                            <input class="form-control fieldValue" th:id="'inputFieldValue-' + ${field.id}"
+                                                   th:value="${field.value}" type="text">
+                                        </div>
+                                        <div class="col-8">
                                         <textarea class="form-control fieldDescription"
-                                                  id="inputFieldDescription-0" th:text="${field.description}"
+                                                  th:id="'inputFieldDescription-' + ${field.id}" th:text="${field.description}"
                                                   type="text"></textarea>
-                                    </div>
-                                    <div class="col-1">
-                                        <!--                                        TODO do not allow to delete the last element-->
-                                        <button class="btn btn-danger removeFieldButton"
-                                                th:id="'removeFieldRowButton-' + ${field.id}" type="button"><i
-                                                class="bi-trash" style="font-size: 1rem; width: 100%;"></i></button>
+                                        </div>
+                                        <div class="col-1">
+                                            <!--                                        TODO do not allow to delete the last element-->
+                                            <button class="btn btn-danger removeFieldButton"
+                                                    th:id="'removeFieldRowButton-' + ${field.id}" type="button"><i
+                                                    class="bi-trash" style="font-size: 1rem; width: 100%;"></i></button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

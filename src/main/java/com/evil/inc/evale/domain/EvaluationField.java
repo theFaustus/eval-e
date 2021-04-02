@@ -44,9 +44,9 @@ public class EvaluationField extends AbstractEntity{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+
         EvaluationField that = (EvaluationField) o;
-        return that.id == this.id;
+        return this.id != null && that.id.equals(this.id);
     }
 
     @Override

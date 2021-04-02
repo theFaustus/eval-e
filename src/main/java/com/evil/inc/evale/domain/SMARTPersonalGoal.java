@@ -52,9 +52,9 @@ public class SMARTPersonalGoal extends AbstractEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+
         SMARTPersonalGoal that = (SMARTPersonalGoal) o;
-        return that.id == this.id;
+        return this.id != null && that.id.equals(this.id);
     }
 
     @Override

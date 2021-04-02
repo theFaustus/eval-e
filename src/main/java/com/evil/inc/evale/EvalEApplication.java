@@ -1,31 +1,19 @@
 package com.evil.inc.evale;
 
-import com.evil.inc.evale.domain.Assessment;
-import com.evil.inc.evale.domain.AssessmentStatus;
-import com.evil.inc.evale.domain.EvaluationField;
-import com.evil.inc.evale.domain.EvaluationGroup;
-import com.evil.inc.evale.domain.Feedback;
-import com.evil.inc.evale.domain.FeedbackAnswer;
-import com.evil.inc.evale.domain.FeedbackQuestion;
-import com.evil.inc.evale.domain.JobPosition;
-import com.evil.inc.evale.domain.SMARTDepartmentGoal;
-import com.evil.inc.evale.domain.SMARTPersonalGoal;
-import com.evil.inc.evale.domain.User;
 import com.evil.inc.evale.repository.AssessmentRepository;
-import com.evil.inc.evale.repository.UserRepository;
 import com.evil.inc.evale.service.AssessmentService;
 import com.evil.inc.evale.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @SpringBootApplication
 @Slf4j
+@EnableConfigurationProperties
 public class EvalEApplication {
 
     public static void main(String[] args) {
