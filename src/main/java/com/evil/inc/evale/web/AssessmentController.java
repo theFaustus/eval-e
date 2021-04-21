@@ -1,5 +1,7 @@
 package com.evil.inc.evale.web;
 
+import com.evil.inc.evale.config.annotations.ServiceQualifier;
+import com.evil.inc.evale.config.annotations.Type;
 import com.evil.inc.evale.domain.Assessment;
 import com.evil.inc.evale.domain.JobPosition;
 import com.evil.inc.evale.domain.User;
@@ -19,10 +21,13 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/assessments")
-@RequiredArgsConstructor
 public class AssessmentController {
 
     private final AssessmentService assessmentService;
+
+    public AssessmentController(@ServiceQualifier(type = Type.REAL) final AssessmentService assessmentService) {
+        this.assessmentService = assessmentService;
+    }
 
     @GetMapping
     public ModelAndView viewAllAssessments(){
