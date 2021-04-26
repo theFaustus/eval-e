@@ -1,4 +1,4 @@
-package com.evil.inc.evale.config.annotations;
+package com.evil.inc.evale.config.annotations.profile;
 
 import org.springframework.context.annotation.Profile;
 
@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@Profile("dev")
-public @interface Development {
+@Profile("prod")
+public @interface Production {
 }

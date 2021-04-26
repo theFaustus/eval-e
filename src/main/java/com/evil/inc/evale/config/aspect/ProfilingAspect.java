@@ -1,5 +1,6 @@
 package com.evil.inc.evale.config.aspect;
 
+import com.evil.inc.evale.config.utils.SimpleProfiler;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -15,14 +16,9 @@ public class ProfilingAspect {
 
     @Around("methodsToBeProfiled()")
     public Object profile(ProceedingJoinPoint pjp) throws Throwable {
-        StopWatch sw = new StopWatch(getClass().getSimpleName());
-        try {
-            sw.start(pjp.getSignature().getName());
-            return pjp.proceed();
-        } finally {
-            sw.stop();
-            log.info(sw.prettyPrint());
-        }
+        final SimpleProfiler simpleProfiler = new SimpleProfiler();
+        simpleProfiler.setOrder(1);
+        return simpleProfiler.profile(pjp);
     }
 
     @Pointcut("execution(public * *(..)) && com.evil.inc.evale.config.aspect.LoggingAspect.serviceLayer()")

@@ -1,14 +1,9 @@
 package com.evil.inc.evale.web;
 
-import com.evil.inc.evale.config.annotations.ServiceQualifier;
-import com.evil.inc.evale.config.annotations.Type;
+import com.evil.inc.evale.config.annotations.qualifier.AssessmentServiceType;
 import com.evil.inc.evale.domain.Assessment;
 import com.evil.inc.evale.domain.JobPosition;
-import com.evil.inc.evale.domain.User;
-import com.evil.inc.evale.service.AssessmentService;
-import com.evil.inc.evale.service.UserService;
 import com.evil.inc.evale.service.dto.AssessmentSummaryDto;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,13 +14,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
+import static com.evil.inc.evale.config.annotations.qualifier.AssessmentServiceType.Type.REAL;
+
 @Controller
 @RequestMapping("/assessments")
 public class AssessmentController {
 
-    private final AssessmentService assessmentService;
+    private final com.evil.inc.evale.service.AssessmentService assessmentService;
 
-    public AssessmentController(@ServiceQualifier(type = Type.REAL) final AssessmentService assessmentService) {
+    public AssessmentController(@AssessmentServiceType(type = REAL) final com.evil.inc.evale.service.AssessmentService assessmentService) {
         this.assessmentService = assessmentService;
     }
 

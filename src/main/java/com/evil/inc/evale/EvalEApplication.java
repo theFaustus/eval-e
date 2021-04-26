@@ -1,28 +1,34 @@
 package com.evil.inc.evale;
 
-import com.evil.inc.evale.config.annotations.Development;
-import com.evil.inc.evale.config.annotations.ServiceQualifier;
-import com.evil.inc.evale.config.annotations.Type;
+import com.evil.inc.evale.config.InstantiationTracingBeanFactoryPostProcessor;
+import com.evil.inc.evale.config.InstantiationTracingBeanPostProcessor;
+import com.evil.inc.evale.config.annotations.profile.Development;
+import com.evil.inc.evale.config.annotations.qualifier.AssessmentServiceType;
 import com.evil.inc.evale.domain.Assessment;
 import com.evil.inc.evale.domain.EvaluationField;
 import com.evil.inc.evale.domain.EvaluationGroup;
 import com.evil.inc.evale.domain.JobPosition;
 import com.evil.inc.evale.repository.AssessmentRepository;
+import com.evil.inc.evale.repository.UserJDBCRepository;
 import com.evil.inc.evale.service.AssessmentService;
+import com.evil.inc.evale.service.FakeAssessmentServiceImpl;
 import com.evil.inc.evale.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.core.env.Environment;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Collections;
+
+import static com.evil.inc.evale.config.annotations.qualifier.AssessmentServiceType.Type.FAKE;
+import static com.evil.inc.evale.config.annotations.qualifier.AssessmentServiceType.Type.REAL;
 
 @SpringBootApplication
 @Slf4j
@@ -37,7 +43,7 @@ public class EvalEApplication {
     @Bean
     @Development
     @Transactional
-    public CommandLineRunner commandLineRunner(Environment environment, @ServiceQualifier(type = Type.REAL) AssessmentService assessmentService, UserService userService, AssessmentRepository assessmentRepository) {
+    public CommandLineRunner commandLineRunner(Environment environment, @AssessmentServiceType(type = REAL) AssessmentService assessmentService, UserService userService, AssessmentRepository assessmentRepository) {
         return args -> {
             log.info("Active profiles : {} ", Arrays.toString(environment.getActiveProfiles()));
             log.info("Creating assessment");
@@ -63,10 +69,28 @@ public class EvalEApplication {
 
     @Bean
     @Transactional
-    public CommandLineRunner commandLineRunner(Environment environment) {
+    public CommandLineRunner otherCommandLineRunner(Environment environment, UserJDBCRepository userJDBCRepository, @AssessmentServiceType(type = FAKE) AssessmentService assessmentService) {
         return args -> {
             log.info("Active profiles : {} ", Arrays.toString(environment.getActiveProfiles()));
+            assessmentService.create(new Assessment());
+            log.debug("{}", userJDBCRepository.findAllUserEmails());
+            log.debug("{}", userJDBCRepository.findAllUserEmailsByUserNames(Collections.singletonList("dtufar")));
         };
+    }
+
+    @Bean
+    public static InstantiationTracingBeanFactoryPostProcessor instantiationTracingBeanFactoryPostProcessor(){
+        return new InstantiationTracingBeanFactoryPostProcessor();
+    }
+
+    @Bean
+    public static InstantiationTracingBeanPostProcessor instantiationTracingBeanPostProcessor(){
+        return new InstantiationTracingBeanPostProcessor();
+    }
+
+    @Bean(initMethod = "initMethod", destroyMethod = "destroyMethod")
+    public FakeAssessmentServiceImpl fakeAssessmentServiceImpl(PlatformTransactionManager platformTransactionManager){
+        return new FakeAssessmentServiceImpl(platformTransactionManager);
     }
 
 }

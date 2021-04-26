@@ -39,9 +39,9 @@ public class LoggingAspect {
 
     @Around(value = "serviceLayer() || repoLayer() || webLayer()")
     public Object logAround(ProceedingJoinPoint pjp) throws Throwable {
-        log.info("Before layer with around > {} ", pjp);
+        log.debug("before :: {} ", pjp.toLongString());
         final Object returnValue = pjp.proceed();
-        log.info("After layer with around > {} ",  pjp);
+        log.debug("after :: {} ",  pjp.toLongString());
         return returnValue;
     }
 

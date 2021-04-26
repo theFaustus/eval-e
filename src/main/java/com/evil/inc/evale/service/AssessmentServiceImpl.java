@@ -1,7 +1,6 @@
 package com.evil.inc.evale.service;
 
-import com.evil.inc.evale.config.annotations.ServiceQualifier;
-import com.evil.inc.evale.config.annotations.Type;
+import com.evil.inc.evale.config.annotations.qualifier.AssessmentServiceType;
 import com.evil.inc.evale.domain.Assessment;
 import com.evil.inc.evale.domain.exception.AssessmentNotFoundException;
 import com.evil.inc.evale.repository.AssessmentRepository;
@@ -15,11 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.evil.inc.evale.config.annotations.qualifier.AssessmentServiceType.Type.REAL;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@ServiceQualifier(type = Type.REAL)
-class AssessmentServiceImpl implements AssessmentService {
+@AssessmentServiceType(type = REAL)
+class AssessmentServiceImpl implements com.evil.inc.evale.service.AssessmentService {
     private final AssessmentRepository assessmentRepository;
     private final AssessmentMapper assessmentMapper;
 

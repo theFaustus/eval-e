@@ -1,4 +1,4 @@
-package com.evil.inc.evale.config.annotations;
+package com.evil.inc.evale.config.annotations.qualifier;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -13,6 +13,11 @@ import java.lang.annotation.Target;
         ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier
-public @interface ServiceQualifier {
+public @interface AssessmentServiceType {
     Type type();
+
+    enum Type {
+        FAKE, REAL
+    }
+
 }
