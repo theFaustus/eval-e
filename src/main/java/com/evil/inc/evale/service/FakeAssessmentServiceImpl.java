@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -17,6 +18,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.io.IOException;
 import java.util.List;
 
 import static com.evil.inc.evale.config.annotations.qualifier.AssessmentServiceType.Type.FAKE;
@@ -28,8 +30,10 @@ public class FakeAssessmentServiceImpl implements AssessmentService, Initializin
     private final TransactionTemplate transactionTemplate;
     private PlatformTransactionManager txManager;
 
-    public FakeAssessmentServiceImpl(PlatformTransactionManager txManager) {
+    public FakeAssessmentServiceImpl(ApplicationArguments applicationArguments,
+                                     PlatformTransactionManager txManager)  {
         log.debug("FakeAssessmentServiceImpl::FakeAssessmentServiceImpl");
+        log.debug("ApplicationArguments::{}", applicationArguments.getNonOptionArgs());
         this.txManager = txManager;
         this.transactionTemplate = new TransactionTemplate(txManager);
     }

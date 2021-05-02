@@ -14,12 +14,14 @@ import com.evil.inc.evale.service.AssessmentService;
 import com.evil.inc.evale.service.FakeAssessmentServiceImpl;
 import com.evil.inc.evale.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,6 +71,7 @@ public class EvalEApplication {
 
     @Bean
     @Transactional
+    @Profile("!test")
     public CommandLineRunner otherCommandLineRunner(Environment environment, UserJDBCRepository userJDBCRepository, @AssessmentServiceType(type = FAKE) AssessmentService assessmentService) {
         return args -> {
             log.info("Active profiles : {} ", Arrays.toString(environment.getActiveProfiles()));
@@ -89,8 +92,9 @@ public class EvalEApplication {
     }
 
     @Bean(initMethod = "initMethod", destroyMethod = "destroyMethod")
-    public FakeAssessmentServiceImpl fakeAssessmentServiceImpl(PlatformTransactionManager platformTransactionManager){
-        return new FakeAssessmentServiceImpl(platformTransactionManager);
+    @Profile("!test")
+    public FakeAssessmentServiceImpl fakeAssessmentServiceImpl(PlatformTransactionManager platformTransactionManager, ApplicationArguments applicationArguments){
+        return new FakeAssessmentServiceImpl(applicationArguments, platformTransactionManager);
     }
 
 }

@@ -20,7 +20,6 @@ public class UserJDBCRepository {
         return jdbcTemplate.queryForList("select u.email from users u", String.class);
     }
 
-
     public List<String> findAllUserEmailsByUserNames(List<String> usernames){
         String sql = "select u.email from users u where username in (:usernames)";
         SqlParameterSource namedParameters = new MapSqlParameterSource("usernames", usernames);
